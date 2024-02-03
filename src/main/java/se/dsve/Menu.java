@@ -68,28 +68,72 @@ public class Menu {
 
     private void searchByTitle() {
         // TODO: Sök efter en film i databasen om den inte finns i databasen, sök i API:et och spara resultatet i databasen
+        String title = inputHelper.promptUserAndGetString("Enter movie title: ");
+        List<Movie> movies = moviesDAO.findMovieInDatabaseByTitle(title);
+
+        if (movies.isEmpty()) {
+            Movie movie = getMovieFromApi(title);
+            if (movie != null) { // Assuming notInDatabase checks if movie exists in DB, but method seems redundant now
+                moviesDAO.addMovieToDatabase(movie);
+                movie.printMovie(); // Show the movie after adding
+            } else {
+                System.out.println("Movie not found in API.");
+            }
+        } else {
+            movies.forEach(Movie::printMovie);
+        }
     }
 
 
     private Movie getMovieFromApi(String title) {
         // TODO: Hämta filmen från API:et
-        return null;
+        try {
+            Movie movie = getMovieFromApi(title);
+            if (movie != null) {
+                moviesDAO.addMovieToDatabase(movie);
+                movie.printMovie();
+            } else {
+                System.out.println("Movie not found in API.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    return null;
     }
 
-    private static boolean notInDatabase(Movie movie) {
+    private static boolean notInDatabase(Movie movie)
+        {
         // TODO: Kontrollera om filmen inte är null
-        return false;
+        return movie != null;
+
     }
 
     private void searchByYear() {
         // TODO: Sök efter en film i databasen efter år, sök inte i API:et!
+        int year = inputHelper.promptUserAndGetInt("Enter movie year: ");
+        List<Movie> movies = moviesDAO.findMovieInDatabaseByYear(year);
+        for (Movie movie : movies) {
+            movie.printMovie();
+        }
     }
 
     private void searchByActor() {
         // TODO: Sök efter en film i databasen efter år, sök inte i API:et!
+        String actor = inputHelper.promptUserAndGetString("Enter actor name: ");
+        List<Movie> movies = moviesDAO.findMovieInDatabaseByActor(actor);
+        for (Movie movie : movies) {
+            movie.printMovie();
+        }
     }
 
     private void searchByDirector() {
         // TODO: Sök efter en film i databasen efter år, sök inte i API:et!
+    String director = inputHelper.promptUserAndGetString("Enter director name: ");
+    List<Movie> movies = moviesDAO.findMovieInDatabaseByDirector(director);
+    for (Movie movie : movies) {
+        movie.printMovie();
+
     }
-}
+        }
+    }
+

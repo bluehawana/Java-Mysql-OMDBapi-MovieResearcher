@@ -8,7 +8,7 @@ public class MovieBuilder {
     private String director;
     private String genre;
 
-    public MovieBuilder(String title, int year, String actors, String director, String genre) {
+    public MovieBuilder(String title, int year, String actors, String director) {
         this.title = title;
         this.year = year;
         this.actors = actors;

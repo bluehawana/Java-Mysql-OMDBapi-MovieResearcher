@@ -5,16 +5,26 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class AppConfig {
     // TODO: Läs in värden från .env-filen
     static Dotenv dotenv = Dotenv.load();
-    private static final String OMDB_API_KEY = "";
-    private static final String DB_USER = "";
-    private static final String DB_PASSWORD = "";
-    private static final String DB_DRIVER = "";
-    private static final String DB_SERVER = "";
-    private static final String DB_PORT = "";
-    private static final String DB_DATABASE = "";
+    static {
+        try {
+            dotenv = Dotenv.load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Retrieve values from .env file using the dotenv object
+    private static final String OMDB_API_KEY = dotenv.get("OMDB_API_KEY");
+    private static final String DB_USER = dotenv.get("DB_USER");
+    private static final String DB_PASSWORD = dotenv.get("DB_PASSWORD");
+    private static final String DB_DRIVER = dotenv.get("DB_DRIVER");
+    private static final String DB_SERVER = dotenv.get("DB_SERVER");
+    private static final String DB_PORT = dotenv.get("DB_PORT");
+    private static final String DB_DATABASE = dotenv.get("DB_DATABASE");
 
     public static String getOmdbApiKey() {
-        return OMDB_API_KEY;
+        return dotenv.get("OMDB_API_KEY");
     }
 
     public static String getDbUser() {

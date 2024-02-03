@@ -21,6 +21,12 @@ public class MoviesDAO {
     }
 
     private void initializeTable() {
+        try(Connection connection = database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TABLE_SQL)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            database.printSQLException(e);
+        }
         // TODO: Skapa en tabell i databasen om den inte finns
     }
 
@@ -36,25 +42,42 @@ public class MoviesDAO {
 
     public void clearMoviesTable() {
         // TODO: Ta bort alla filmer från databasen när programmet startar
+        String deleteAllMoviesSql = "DELETE FROM movies";
+        try(Connection connection = database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteAllMoviesSql)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            database.printSQLException(e);
+        }
     }
 
     public void addMovieToDatabase(Movie movie) {
         // TODO: Lägg till en film i databasen
+        String insertMovieSql = "INSERT INTO movies (title, year, director) VALUES (?, ?, ?)";
+        try(Connection connection = database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(insertMovieSql)) {
+            preparedStatement.setString(1, movie.getTitle());
+            preparedStatement.setInt(2, movie.getYear());
+            preparedStatement.setString(3, movie.getDirector());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            database.printSQLException(e);
+        }
     }
 
     public List<Movie> findMovieInDatabaseByTitle(String search) {
         // TODO: Skriv din kod här
-        return new List<>();
+       return findInDatabase(SELECT_MOVIE_BY_TITLE_SQL, search);
     }
 
     public List<Movie> findMovieInDatabaseByActor(String search) {
         // TODO: Skriv din kod här
-        return new List<>();
+        return findInDatabase(SELECT_MOVIE_BY_ACTOR_SQL, search);
     }
 
     public List<Movie> findMovieInDatabaseByYear(int search) {
         // TODO: Skriv din kod här
-        return new List<>();
+        return findInDatabase(SELECT_MOVIE_BY_YEAR_SQL, String.valueOf(search));
     }
 
     public List<Movie> findMovieInDatabaseByDirector(String search) {
@@ -64,6 +87,20 @@ public class MoviesDAO {
 
     private List<Movie> findInDatabase(String sqlQuery, String search) {
         // TODO: Skriv din kod här för att följa DRY-principen
-        return new List<>();
+        List<Movie> movies = new ArrayList<>();
+        try(Connection connection = database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, search);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                int year = resultSet.getInt("year");
+                String director = resultSet.getString("director");
+                movies.add(new Movie(title, year, director));
+            }
+        } catch (SQLException e) {
+            database.printSQLException(e);
+        }
+        return movies;
     }
 }
