@@ -6,6 +6,7 @@ import se.dsve.dao.MoviesDAO;
 import se.dsve.helpers.InputHelper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -14,7 +15,7 @@ public class Menu {
     private ApiService apiService = new ApiService();
     private static InputHelper inputHelper = new InputHelper();
 
-    public Menu() throws IOException {
+    public Menu() throws IOException, SQLException {
         // Skapa en Database-instans och skicka den till MoviesDAO
         Database database = new Database();
         moviesDAO = new MoviesDAO(database);
@@ -88,17 +89,18 @@ public class Menu {
     private Movie getMovieFromApi(String title) {
         // TODO: Hämta filmen från API:et
         try {
-            Movie movie = getMovieFromApi(title);
+            Movie movie = apiService.getDataByTitle(title);
             if (movie != null) {
-                moviesDAO.addMovieToDatabase(movie);
-                movie.printMovie();
+                moviesDAO.addMovieToDatabase(movie); // Add movie to database if not null
+                movie.printMovie(); // Optionally print the movie details
+                return movie;
             } else {
                 System.out.println("Movie not found in API.");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    return null;
+        return null;
     }
 
     private static boolean notInDatabase(Movie movie)

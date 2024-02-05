@@ -20,6 +20,9 @@ public class Movie {
     public Movie(String title, int year, String director) {
     }
 
+    public Movie(String title, int year, String director, String actors) {
+    }
+
     // Metod för att skriva ut filmens detaljer
     public void printMovie() {
         System.out.println("Title: " + title);
