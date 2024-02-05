@@ -7,7 +7,7 @@ OBS!!! Ändra absolut inte på rubrikerna i denna fil!!!!
 
 ### Skriv en kort sammanfattning av vad uppgiften handlar om.
 
-Skriv kort och koncist här (minst 80 tecken samt max 5-7 meningar).
+Uppgiften går ut på att utveckla en Java-baserad filmhanteringsapplikation med integration till OMDB API och MySQL-databasen. Applikationen ska kunna hämta filmdata från OMDB API och spara den i en MySQL-databas. Det möjliggör för användaren att utföra olika operationer som att söka efter filmer, lägga till filmer i databasen, visa en lista över befintliga filmer och även uppdatera eller ta bort filmer från databasen.
 
 --- Skriv ovanför och ta inte bort denna raden ---
 

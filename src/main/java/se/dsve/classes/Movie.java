@@ -9,18 +9,13 @@ public class Movie {
     private String genre;
 
     // Antag att detta är din konstruktor
-    public Movie(String title, int year, String actors, String director, String genre) {
+
+    public Movie(String title, int year, String director, String actors, String genre) {
         this.title = title;
         this.year = year;
-        this.actors = actors;
         this.director = director;
+        this.actors = actors;
         this.genre = genre;
-    }
-
-    public Movie(String title, int year, String director) {
-    }
-
-    public Movie(String title, int year, String director, String actors) {
     }
 
     // Metod för att skriva ut filmens detaljer
@@ -74,7 +69,7 @@ public class Movie {
     }
 
     public String toString() {
-        return "Movie{" + "title='" + title + '\'' + ", year='" + year + '\'' + ", actors='" + actors + '\'' + ", director='" + director + '\'' + ", Genre='" + genre + '\'' + '}';
+        return "Movie{" + "title='" + title + '\'' + ", year='" + year + '\'' + ", actors='" + actors + '\'' + ", director='" + director + '\'' + ", genre='" + genre + '\'' + '}';
     }
 }
 

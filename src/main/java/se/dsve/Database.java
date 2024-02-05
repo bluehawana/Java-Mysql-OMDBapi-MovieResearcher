@@ -15,9 +15,7 @@ public class Database {
 
     private static final String DB_URL = "jdbc:mysql://" + DB_SERVER + ":" + DB_PORT + "/";
     private static final String CONNECTION_URL = DB_URL + "?useSSL=false&allowPublicKeyRetrieval=true";
-
-
-
+    private static final String CREATE_DATABASE_SQL = "CREATE DATABASE IF NOT EXISTS " + DB_DATABASE;
 
 
     // TODO: Skapa DB_URL med hjälp av variablerna ovan
@@ -34,7 +32,7 @@ public class Database {
 
 
     // SQL query for creating the database
-    private static String CREATE_DATABASE_SQL ="", CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS movies (id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(255), year INT, director VARCHAR(255), actors VARCHAR(255))";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS movies (id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(255), year INT, director VARCHAR(255), actors VARCHAR(255), genre VARCHAR(255))";
 
     public Database() throws SQLException {
 
@@ -45,20 +43,16 @@ public class Database {
         // TODO: Anslut till databasservern utan att specificera en databas
             // TODO: Skapa databasen om den inte finns
             // TODO: Byt till den nyss skapade databasen
-     try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-         Statement statement = connection.createStatement()) {
-         statement.executeUpdate(CREATE_DATABASE_SQL);
-         statement.executeUpdate(CREATE_TABLE_SQL);
-         try (Connection dbConnection = DriverManager.getConnection(CONNECTION_URL, DB_USER, DB_PASSWORD)) {
-             // Example: Create a 'movies' table if it doesn't already exist
-             statement.execute("USE " + DB_DATABASE); // Switch to the database
-             statement.execute("CREATE TABLE IF NOT EXISTS movies (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), year INT, director VARCHAR(255), actors VARCHAR(255))");
-             System.out.println("Table checked/created successfully");
-         }
-     } catch (SQLException e) {
-         printSQLException(e);
-     }
-    }
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 Statement statement = connection.createStatement()) {
+                statement.executeUpdate(CREATE_DATABASE_SQL);
+                statement.execute("USE " + DB_DATABASE); // Switch to the database
+                statement.executeUpdate(CREATE_TABLE_SQL);
+                System.out.println("Database and table checked/created successfully");
+            } catch (SQLException e) {
+                printSQLException(e);
+            }
+        }
 
     public void printSQLException(SQLException ex) {
         // TODO: Skriv ut felmeddelanden från SQL Exceptions
@@ -75,9 +69,12 @@ public class Database {
     }
 
     public Connection getConnection() {
-        // TODO: Skapa en anslutning till databasen
         try {
-            return DriverManager.getConnection(DB_URL + DB_DATABASE + "?useSSL=false&allowPublicKeyRetrieval=true", DB_USER, DB_PASSWORD);
+            Connection connection = DriverManager.getConnection(DB_URL + "?useSSL=false&allowPublicKeyRetrieval=true", DB_USER, DB_PASSWORD);
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("USE " + DB_DATABASE); // Switch to the database
+            }
+            return connection;
         } catch (SQLException e) {
             printSQLException(e);
             return null;

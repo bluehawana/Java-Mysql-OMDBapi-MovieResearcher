@@ -106,6 +106,10 @@ public class Menu {
     private static boolean notInDatabase(Movie movie)
         {
         // TODO: Kontrollera om filmen inte är null
+            if(movie != null)
+            {
+                return true;
+            }
         return movie != null;
 
     }
